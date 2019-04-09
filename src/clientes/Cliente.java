@@ -12,4 +12,22 @@ public class Cliente {
 		this.age = age;
 		this.gender = gender;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+	
+	
 }
