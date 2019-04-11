@@ -1,4 +1,4 @@
-package App;
+package clientes;
 
 public enum Genero {
     FEMININO,
