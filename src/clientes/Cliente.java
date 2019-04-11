@@ -1,12 +1,14 @@
 package clientes;
 
+import App.Genero;
+
 public class Cliente {
 	private String name;
 	private String cpf;
 	private int age;
-	private String gender;
+	private Genero gender;
 	
-	public Cliente (String name,  String cpf, int age, String gender) {
+	public Cliente (String name,  String cpf, int age, Genero gender) {
 		this.name = name;
 		this.cpf = cpf;
 		this.age = age;
@@ -24,10 +26,8 @@ public class Cliente {
 	public int getAge() {
 		return age;
 	}
-
-	public String getGender() {
+	
+	public Genero getGender() {
 		return gender;
 	}
-	
-	
 }
