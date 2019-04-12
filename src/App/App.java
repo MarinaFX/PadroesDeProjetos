@@ -12,19 +12,18 @@ public class App {
 
 	private static List<Cliente> clientesNoBar = new ArrayList<>();
 	private static List<Cliente> clientesTotal = new ArrayList<>();
+	private static SistemaBar sist = new SistemaBar();
 
 	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
 
-		menuOpcoes(sc);
-		registraEntradaCliente(sc,clientesNoBar);
+		menuOpcoes();
 
 	}
 
-	public static void menuOpcoes(Scanner sc) {
-		SistemaBar sist = new SistemaBar();
+	public static void menuOpcoes() {
+		Scanner sc = new Scanner(System.in);
 
-		int opc=0;
+		int opc = 0;
 
 		while(true) {
 
@@ -36,12 +35,15 @@ public class App {
 			System.out.println("6) Distribuição de Sócios");
 			System.out.println("7) Encerrar Dia");
 
+			opc = sc.nextInt();
+			sc.nextLine();
+
 			if(opc==1) {
-				registraEntradaCliente(sc,clientesNoBar);
+				registraEntradaCliente();
 			} else if(opc==2) {
 				registraSaidaCliente();
 			} else if(opc==3) {
-				pessoasNoBar();
+				printLista(sist.getClientes());
 			} else if(opc==4) {
 				procurarPessoaNoBar();
 			} else if(opc==5) {
@@ -49,7 +51,7 @@ public class App {
 			} else if(opc==6) {
 				distribuicaoSocio();
 			} else if(opc==7) {
-
+				printLista(clientesTotal);
 			} else {
 				System.out.println("Opção inválida.");
 			}
@@ -58,7 +60,9 @@ public class App {
 
 	}
 
-	public static void registraEntradaCliente(Scanner sc, List<Cliente> c) {
+	public static void registraEntradaCliente() {
+		Scanner sc = new Scanner(System.in);
+
 		String nome, cpf, generoAux, isSocio, socio;
 		int idade;
 		Genero genero;
@@ -98,27 +102,67 @@ public class App {
 
 		clientesNoBar.add(cliente);
 		clientesTotal.add(cliente);
+
 		System.out.println("Cadastro finalizado.");
 
 	}
 
 	public static void registraSaidaCliente() {
+		Scanner sc = new Scanner(System.in);
+		String cpf;
+
+		System.out.println("~~~Cadastro de Saída de Cliente~~~");
+
+		System.out.println("Informe o CPF: ");
+		cpf = sc.nextLine();
+
+		Cliente cliente = sist.procuraCliente(cpf);
+
+		clientesNoBar.remove(cliente);
+
+		System.out.println("Saída registrada.");
 
 	}
 
-	public static void pessoasNoBar() {
-
+	public static void printLista(List<Cliente> lst) {
+		lst.forEach(System.out::println);
 	}
+
 
 	public static void procurarPessoaNoBar() {
+		Scanner sc = new Scanner(System.in);
+		String cpf;
+		Cliente cliente = null;
 
+		System.out.println("~~~Procurar Cliente~~~");
+
+		System.out.println("Informe o CPF do Cliente: ");
+		cpf = sc.nextLine();
+
+		try {
+			cliente = sist.procuraCliente(cpf);
+			System.out.println("O cliente " + cliente.getName() + " está no bar.");
+		}catch(NullPointerException e) {
+			System.out.println("O cliente não está no Bar.");
+		}
 	}
 
 	public static void distribuicaoGenero() {
+		double homens = sist.getDistribuicaoMasculina();
+		double mulheres = sist.getDistribuicaoFeminina();
 
+		System.out.println("~~~ Distribuição por Gênero ~~~");
+		System.out.println(mulheres + "% mulheres.");
+		System.out.println(homens + "% homens.");
 	}
 
 	public static void distribuicaoSocio() {
+		double socios = sist.getDistribuicaoStatusSocio();
+		double naoSocios = sist.getDistribuicaoNaoSocios();
+
+		System.out.println("~~~ Distribuição por Sócios ~~~");
+		System.out.println(socios + "% sócios.");
+		System.out.println(naoSocios + "% não sócios.");
 
 	}
 
