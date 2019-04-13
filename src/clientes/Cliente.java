@@ -5,7 +5,7 @@ public class Cliente {
 	private String cpf;
 	private int age;
 	private Genero gender;
-	
+
 	public Cliente (String name,  String cpf, int age, Genero gender) {
 		this.name = name;
 		this.cpf = cpf;
@@ -28,4 +28,12 @@ public class Cliente {
 	public Genero getGender() {
 		return gender;
 	}
+
+	public String toString() {
+		return name + ", " +
+				cpf + ", " +
+				age + ", " +
+				gender;
+	}
+
 }

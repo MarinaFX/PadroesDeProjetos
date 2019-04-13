@@ -12,4 +12,8 @@ public class Socio extends Cliente {
 	public String getVip() {
 		return vip;
 	}
+
+	public String toString() {
+		return super.toString() + ", " + vip;
+	}
 }

@@ -5,70 +5,76 @@ import clientes.Genero;
 import clientes.Socio;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class App {
 
-	private static List<Cliente> clientesNoBar = new ArrayList<>();
-	private static List<Cliente> clientesTotal = new ArrayList<>();
 	private static SistemaBar sist = new SistemaBar();
 
 	public static void main(String[] args) {
-
 		menuOpcoes();
-
 	}
 
 	public static void menuOpcoes() {
 		Scanner sc = new Scanner(System.in);
 
-		int opc = 0;
+		int opc;
 
-		while(true) {
+		System.out.println("Seja bem-vindo!");
 
-			System.out.println("1) Registrar entrada de Cliente");
-			System.out.println("2) Registrar saída de Cliente");
-			System.out.println("3) Pessoas no Bar");
-			System.out.println("4) Procurar Cliente no Bar");
-			System.out.println("5) Distribuição por Gênero");
-			System.out.println("6) Distribuição de Sócios");
-			System.out.println("7) Encerrar Dia");
+		try {
 
-			opc = sc.nextInt();
-			sc.nextLine();
+			while(true) {
 
-			if(opc==1) {
-				registraEntradaCliente();
-			} else if(opc==2) {
-				registraSaidaCliente();
-			} else if(opc==3) {
-				printLista(sist.getClientes());
-			} else if(opc==4) {
-				procurarPessoaNoBar();
-			} else if(opc==5) {
-				distribuicaoGenero();
-			} else if(opc==6) {
-				distribuicaoSocio();
-			} else if(opc==7) {
-				printLista(clientesTotal);
-			} else {
-				System.out.println("Opção inválida.");
+				System.out.println("1) Registrar entrada de Cliente");
+				System.out.println("2) Registrar saída de Cliente");
+				System.out.println("3) Lista de pessoas no Bar");
+				System.out.println("4) Procurar Cliente no Bar");
+				System.out.println("5) Distribuição por Gênero");
+				System.out.println("6) Distribuição de Sócios");
+				System.out.println("7) Encerrar o Dia");
+
+				opc = sc.nextInt();
+				sc.nextLine();
+
+				if (opc == 1) {
+					registraEntradaCliente();
+				} else if (opc == 2) {
+					registraSaidaCliente();
+				} else if (opc == 3) {
+					printLista(sist.getClientesNoBar());
+				} else if (opc == 4) {
+					procurarPessoaNoBar();
+				} else if (opc == 5) {
+					distribuicaoGenero();
+				} else if (opc == 6) {
+					distribuicaoSocio();
+				} else if (opc == 7) {
+					printLista(sist.getTotalClientes());
+					sist.guardaLista();
+					break;
+				} else {
+					System.out.println("Opção inválida.\n");
+					break;
+				}
 			}
+
+		} catch(InputMismatchException e) {
+			System.out.println("Opção inválida.");
 		}
-
-
 	}
 
 	public static void registraEntradaCliente() {
 		Scanner sc = new Scanner(System.in);
 
-		String nome, cpf, generoAux, isSocio, socio;
+		String nome, cpf, generoAux, socio, numSocio;
 		int idade;
 		Genero genero;
 		Cliente cliente;
 
-		System.out.println("~~~Cadastro de Entrada de Cliente~~~");
+		System.out.println("\n~~~Cadastro de Entrada de Cliente~~~");
 
 		System.out.print("Informe o nome: ");
 		nome = sc.nextLine();
@@ -82,45 +88,42 @@ public class App {
 
 		System.out.print("Gênero: ");
 		generoAux = sc.nextLine();
-		genero = trataGenero(generoAux);
+		genero = sist.trataGenero(generoAux);
 
 		System.out.println("Você é sócio do bar?");
-		isSocio = sc.nextLine();
+		socio = sc.nextLine();
 
-		if(isSocio.equalsIgnoreCase("sim")) {
+		if(socio.equalsIgnoreCase("sim")) {
 
 			System.out.println("Número de socio: ");
-			socio = sc.nextLine();
+			numSocio = sc.nextLine();
 
-			cliente = new Socio(nome,cpf,idade,genero,socio);
+			cliente = new Socio(nome,cpf,idade,genero,numSocio);
 
 		} else {
 
 			cliente = new Cliente(nome,cpf,idade,genero);
-
 		}
 
-		clientesNoBar.add(cliente);
-		clientesTotal.add(cliente);
+		sist.cadastraCliente(cliente);
 
-		System.out.println("Cadastro finalizado.");
-
+		System.out.println("~~~Cadastro finalizado~~~\n");
 	}
 
 	public static void registraSaidaCliente() {
 		Scanner sc = new Scanner(System.in);
 		String cpf;
 
-		System.out.println("~~~Cadastro de Saída de Cliente~~~");
+		System.out.println("\n~~~Cadastro de Saída de Cliente~~~");
 
 		System.out.println("Informe o CPF: ");
 		cpf = sc.nextLine();
 
 		Cliente cliente = sist.procuraCliente(cpf);
 
-		clientesNoBar.remove(cliente);
+		sist.cadastraSaida(cliente);
 
-		System.out.println("Saída registrada.");
+		System.out.println("~~~Saída registrada~~~\n");
 
 	}
 
@@ -132,9 +135,9 @@ public class App {
 	public static void procurarPessoaNoBar() {
 		Scanner sc = new Scanner(System.in);
 		String cpf;
-		Cliente cliente = null;
+		Cliente cliente;
 
-		System.out.println("~~~Procurar Cliente~~~");
+		System.out.println("\n~~~Procurar Cliente~~~");
 
 		System.out.println("Informe o CPF do Cliente: ");
 		cpf = sc.nextLine();
@@ -145,37 +148,30 @@ public class App {
 		}catch(NullPointerException e) {
 			System.out.println("O cliente não está no Bar.");
 		}
+
+		System.out.println("~~~~~~\n");
 	}
 
 	public static void distribuicaoGenero() {
 		double homens = sist.getDistribuicaoMasculina();
 		double mulheres = sist.getDistribuicaoFeminina();
 
-		System.out.println("~~~ Distribuição por Gênero ~~~");
+		System.out.println("\n~~~ Distribuição por Gênero ~~~");
 		System.out.println(mulheres + "% mulheres.");
 		System.out.println(homens + "% homens.");
+		System.out.println("~~~~~~\n");
 	}
 
 	public static void distribuicaoSocio() {
 		double socios = sist.getDistribuicaoStatusSocio();
 		double naoSocios = sist.getDistribuicaoNaoSocios();
 
-		System.out.println("~~~ Distribuição por Sócios ~~~");
+		System.out.println("\n~~~ Distribuição por Sócios ~~~");
 		System.out.println(socios + "% sócios.");
 		System.out.println(naoSocios + "% não sócios.");
+		System.out.println("~~~~~~\n");
 
 	}
 
-	public static Genero trataGenero(String genero) {
-
-		if(genero.equalsIgnoreCase("feminino")) {
-			return Genero.FEMININO;
-		} else if(genero.equalsIgnoreCase("masculino")) {
-			return Genero.MASCULINO;
-		} else {
-			return null;
-		}
-
-	}
 
 }

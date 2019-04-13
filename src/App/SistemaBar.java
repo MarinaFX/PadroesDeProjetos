@@ -4,24 +4,51 @@ import clientes.Cliente;
 import clientes.Genero;
 import clientes.Socio;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class SistemaBar {
-    private List<Cliente> clientes;
 
-    public int getNumeroPessoas() {
-        return clientes.size();
+    private static final String fName = "listabar.txt";
+    private static final String currDir = Paths.get("").toAbsolutePath().toString();
+    private static final String nameComplete = currDir + "\\" + fName;
+    private static final Path path = Paths.get(nameComplete);
+
+    private List<Cliente> clientesTotal = new ArrayList<>();
+    private List<Cliente> clientesNoBar = new ArrayList<>();
+
+    public void cadastraCliente(Cliente c) {
+        clientesTotal.add(c);
+        clientesNoBar.add(c);
     }
 
-    public List<Cliente> getClientes() {
-        return clientes;
+    public void cadastraSaida(Cliente c) {
+        clientesNoBar.remove(c);
+    }
+
+    public int getNumeroPessoas() {
+        return clientesNoBar.size();
+    }
+
+    public List<Cliente> getTotalClientes() {
+        return clientesTotal;
+    }
+
+    public List<Cliente> getClientesNoBar() {
+        return clientesNoBar;
     }
 
     public Cliente procuraCliente(String newCPF) {
         Cliente cliente = null;
 
-        for (Cliente a : clientes) {
+        for (Cliente a : clientesNoBar) {
             if (a.getCpf().equals(newCPF)) {
                 cliente = a;
                 break;
@@ -32,7 +59,7 @@ public class SistemaBar {
     }
 
     public double getDistribuicaoMasculina() {
-        List<Cliente> listHomens = clientes.stream()
+        List<Cliente> listHomens = clientesNoBar.stream()
                 .filter(Cliente -> Cliente.getGender() == Genero.MASCULINO)
                 .collect(Collectors.toList());
 
@@ -48,15 +75,14 @@ public class SistemaBar {
     }
 
     public double getDistribuicaoStatusSocio() {
-        double percent = 0;
 
-        List<Cliente> listSocios = clientes.stream()
+        List<Cliente> listSocios = clientesNoBar.stream()
                 .filter(Cliente -> Cliente.getClass().equals(Socio.class))
                 .collect(Collectors.toList());
 
         int distribuicaoSocio = listSocios.size();
 
-        percent = ((distribuicaoSocio * 100.0) / getNumeroPessoas());
+        double percent = ((distribuicaoSocio * 100.0) / getNumeroPessoas());
 
         return percent;
 
@@ -66,6 +92,37 @@ public class SistemaBar {
         return (100 - getDistribuicaoStatusSocio());
     }
 
+    public Genero trataGenero(String genero) {
 
+        if(genero.equalsIgnoreCase("feminino")) {
+            return Genero.FEMININO;
+        } else if(genero.equalsIgnoreCase("masculino")) {
+            return Genero.MASCULINO;
+        } else {
+            return null;
+        }
 
+    }
+
+    public void guardaLista() {
+
+        System.out.println(path);
+
+        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(path, Charset.defaultCharset()))) {
+
+            for (Cliente c : clientesTotal) {
+
+                String linha = c.getName() + ";" +
+                            c.getCpf() + ";" +
+                            c.getAge() + ";" +
+                            c.getGender() + ";" +
+                            c.getClass().getSimpleName();
+                writer.println(linha);
+            }
+
+        } catch (IOException x) {
+            System.err.format("Erro ao salvar", x);
+        }
+    }
 }
+
