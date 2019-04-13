@@ -1,13 +1,11 @@
 package clientes;
 
-import App.Genero;
-
 public class Cliente {
 	private String name;
 	private String cpf;
 	private int age;
 	private Genero gender;
-	
+
 	public Cliente (String name,  String cpf, int age, Genero gender) {
 		this.name = name;
 		this.cpf = cpf;
@@ -27,15 +25,15 @@ public class Cliente {
 		return age;
 	}
 
-<<<<<<< HEAD
-	public String getGender() {
-		return gender;
-	}
-	
-	
-=======
 	public Genero getGender() {
 		return gender;
 	}
->>>>>>> origin/Marina
+
+	public String toString() {
+		return name + ", " +
+				cpf + ", " +
+				age + ", " +
+				gender;
+	}
+
 }

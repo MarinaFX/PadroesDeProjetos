@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-<<<<<<< HEAD
+
       <module fileurl="file://$PROJECT_DIR$/PadroesDeProjetos.iml" filepath="$PROJECT_DIR$/PadroesDeProjetos.iml" />
-=======
-      <module fileurl="file://$PROJECT_DIR$/PadroesDeProjeto.iml" filepath="$PROJECT_DIR$/PadroesDeProjeto.iml" />
->>>>>>> origin/Marina
+
     </modules>
   </component>
 </project>
