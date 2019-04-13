@@ -10,6 +10,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +26,7 @@ public class SistemaBar {
     private List<Cliente> clientesNoBar = new ArrayList<>();
 
     public void cadastraCliente(Cliente c) {
+
         clientesTotal.add(c);
         clientesNoBar.add(c);
     }
@@ -59,6 +61,8 @@ public class SistemaBar {
     }
 
     public double getDistribuicaoMasculina() {
+        DecimalFormat numberFormat = new DecimalFormat("#.00");
+
         List<Cliente> listHomens = clientesNoBar.stream()
                 .filter(Cliente -> Cliente.getGender() == Genero.MASCULINO)
                 .collect(Collectors.toList());
@@ -92,21 +96,8 @@ public class SistemaBar {
         return (100 - getDistribuicaoStatusSocio());
     }
 
-    public Genero trataGenero(String genero) {
-
-        if(genero.equalsIgnoreCase("feminino")) {
-            return Genero.FEMININO;
-        } else if(genero.equalsIgnoreCase("masculino")) {
-            return Genero.MASCULINO;
-        } else {
-            return null;
-        }
-
-    }
 
     public void guardaLista() {
-
-        System.out.println(path);
 
         try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(path, Charset.defaultCharset()))) {
 
