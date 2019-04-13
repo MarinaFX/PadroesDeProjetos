@@ -271,9 +271,9 @@ public class App {
 
     public static Genero trataGenero(String genero) {
 
-        if(genero.equalsIgnoreCase("feminino")) {
+        if(genero.equalsIgnoreCase("feminino") || genero.equalsIgnoreCase("f")) {
             return Genero.FEMININO;
-        } else if(genero.equalsIgnoreCase("masculino")) {
+        } else if(genero.equalsIgnoreCase("masculino") || genero.equalsIgnoreCase("m")) {
             return Genero.MASCULINO;
         } else {
             return null;
