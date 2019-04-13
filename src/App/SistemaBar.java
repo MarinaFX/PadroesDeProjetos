@@ -61,7 +61,6 @@ public class SistemaBar {
     }
 
     public double getDistribuicaoMasculina() {
-        DecimalFormat numberFormat = new DecimalFormat("#.00");
 
         List<Cliente> listHomens = clientesNoBar.stream()
                 .filter(Cliente -> Cliente.getGender() == Genero.MASCULINO)
