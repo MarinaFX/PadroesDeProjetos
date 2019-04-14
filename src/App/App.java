@@ -180,8 +180,8 @@ public class App {
         double mulheres = sist.getDistribuicaoFeminina();
 
         System.out.println("\n~~~ Distribuição por Gênero ~~~");
-        System.out.println(mulheres + "% mulheres.");
-        System.out.println(homens + "% homens.");
+        System.out.printf("%%%.2f mulheres\n", mulheres);
+        System.out.printf("%%%.2f homens\n", homens);
         System.out.println("~~~~~~\n");
     }
 
@@ -190,8 +190,8 @@ public class App {
         double naoSocios = sist.getDistribuicaoNaoSocios();
 
         System.out.println("\n~~~ Distribuição por Sócios ~~~");
-        System.out.println(socios + "% sócios.");
-        System.out.println(naoSocios + "% não sócios.");
+        System.out.printf("%%%.2f socios\n", socios);
+        System.out.printf("%%%.2f não socios\n", naoSocios);
         System.out.println("~~~~~~\n");
 
     }
